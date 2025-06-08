@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Submissions</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+      // Firebase config (replace with your own config)
+      const firebaseConfig = {
+        apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
+        authDomain: "daykart-77771.firebaseapp.com",
+        databaseURL: "https://daykart-77771-default-rtdb.firebaseio.com",
+        projectId: "daykart-77771",
+        storageBucket: "daykart-77771.firebasestorage.app",
+        messagingSenderId: "533666061468",
+        appId: "1:533666061468:web:f56261c5f1cbcc0d776159",
+        measurementId: "G-EDMNTSSJGY"
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+    <style>
+      /* Base styling */
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f7fa;
+        padding: 20px;
+        margin: 0;
+        color: #333;
+      }
+
+      #user-data {
+        max-width: 100%;
+        margin: auto;
+        border-radius: 10px;
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      h2 {
+        text-align: center;
+        color: #4A90E2;
+        margin-bottom: 20px;
+      }
+
+      /* Table styling */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        overflow-x: auto;
+        display: block;
+      }
+
+      th, td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f5f7f9;
+        color: #333;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      td {
+        color: #666;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+      }
+
+      /* Additional Section Styling */
+      .section {
+        margin-top: 40px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .section h3 {
+        color: #4A90E2;
+        margin-bottom: 10px;
+      }
+
+      .list {
+        margin-top: 15px;
+      }
+
+      .list-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 5px;
+      }
+
+      /* Responsive design for smaller screens */
+      @media (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        table {
+          font-size: 14px;
+          overflow-x: auto;
+          display: block;
+        }
+
+        th, td {
+          padding: 8px;
+        }
+
+        .section {
+          padding: 15px;
+        }
+
+        h2 {
+          font-size: 24px;
+        }
+
+        .list-item {
+          font-size: 14px;
+        }
+
+        /* Adjustments for smaller screens (Mobile & Tablets) */
+        .section {
+          margin-top: 20px;
+        }
+
+        #insights {
+          margin-top: 30px;
+        }
+
+        /* Table responsiveness for small screens */
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+
+      /* Very small screens (Mobile) */
+      @media (max-width: 480px) {
+        h2 {
+          font-size: 22px;
+        }
+
+        .section h3 {
+          font-size: 18px;
+        }
+
+        .list-item {
+          font-size: 13px;
+        }
+
+        th, td {
+          padding: 10px;
+        }
+
+        .section {
+          padding: 10px;
+        }
+      }
+
+    </style>
+</head>
+<body>
+
+<div id="user-data">
+    <h2>User Submissions</h2>
+    <table id="user-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Registration No</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>College</th>
+                <th>Product Details</th>
+                <th>Referral Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+    
+    <!-- Product and Referral Insights Section -->
+    <div class="section" id="insights">
+        <h3>Product Sales Insights</h3>
+        <div id="top-products" class="list">
+            <!-- Top Products will be displayed here -->
+        </div>
+
+        <h3>Top Referrers</h3>
+        <div id="top-referrals" class="list">
+            <!-- Top Referrals will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<script>
+  // Reference to the Firestore collection
+  const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+  const topProductsContainer = document.getElementById("top-products");
+  const topReferralsContainer = document.getElementById("top-referrals");
+
+  // Initialize counters for product sales and referrals
+  const productSales = {};
+  const referralCounts = {};
+
+  // Fetch and display user data
+  function displayUserData() {
+    db.collection("userSubmissions").get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const data = doc.data();  // Get data from each document
+
+          // Add product to product sales counter
+          const product = data.productDetails;
+          if (product) {
+            productSales[product] = (productSales[product] || 0) + 1;
+          }
+
+          // Count referrals for the user
+          const refcode = data.refcode;
+          if (refcode) {
+            referralCounts[refcode] = (referralCounts[refcode] || 0) + 1;
+          }
+
+          // Create a new row for the user submission
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${data.name}</td>
+            <td>${data.regno}</td>
+            <td>${data.email}</td>
+            <td>${data.phone}</td>
+            <td>${data.college}</td>
+            <td>${product}</td>
+            <td>${refcode || "N/A"}</td>
+          `;
+
+          userTableBody.appendChild(row);  // Add the row to the table body
+        });
+
+        // Once data is loaded, process insights
+        showTopProducts();
+        showTopReferrers();
+      })
+      .catch(error => {
+        console.error("Error fetching data: ", error);
+      });
+  }
+
+  // Function to display top products sold
+  function showTopProducts() {
+    const sortedProducts = Object.entries(productSales)
+      .sort((a, b) => b[1] - a[1]) // Sort by sales count
+      .slice(0, 5); // Top 5 products
+
+    if (sortedProducts.length === 0) {
+      topProductsContainer.innerHTML = "<p>No product data available.</p>";
+    } else {
+      sortedProducts.forEach(([product, count]) => {
+        const productItem = document.createElement("div");
+        productItem.classList.add("list-item");
+        productItem.textContent = `${product}: ${count} sale(s)`;
+        topProductsContainer.appendChild(productItem);
+      });
+    }
+  }
+
+  // Function to display top referrers
+  function showTopReferrers() {
+    const sortedReferrals = Object.entries(referralCounts)
+      .sort((a, b) => b[1] - a[1]) // Sort by referral count
+      .slice(0, 5); // Top 5 referrers
+
+    if (sortedReferrals.length === 0) {
+      topReferralsContainer.innerHTML = "<p>No referral data available.</p>";
+    } else {
+      sortedReferrals.forEach(([refcode, count]) => {
+        const referralItem = document.createElement("div");
+        referralItem.classList.add("list-item");
+        referralItem.textContent = `${refcode}: ${count} referral(s)`;
+        topReferralsContainer.appendChild(referralItem);
+      });
+    }
+  }
+
+  // Display data when the page loads
+  window.onload = displayUserData;
+</script>
+
+</body>
+</html>

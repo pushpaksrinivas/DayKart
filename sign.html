@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="lod_styles.css">
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
+      authDomain: "daykart-77771.firebaseapp.com",
+      databaseURL: "https://daykart-77771-default-rtdb.firebaseio.com",
+      projectId: "daykart-77771",
+      storageBucket: "daykart-77771.appspot.com",
+      messagingSenderId: "533666061468",
+      appId: "1:533666061468:web:a40c38b11a93a18e776159",
+      measurementId: "G-X1FCYK4XR1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Make Firebase services globally accessible
+    window.firebaseService = {
+      auth,
+      db,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setDoc,
+      doc
+    };
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <div class="link">
+      <p><a href="forgot.html">Forgot password?</a></p>
+      <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
+  </div>
+
+  <script type="module" src="log_scprit.js"></script>
+</body>
+</html>

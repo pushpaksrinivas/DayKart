@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product and Referral Analytics</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const firebaseConfig = {
+  apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
+  authDomain: "daykart-77771.firebaseapp.com",
+  databaseURL: "https://daykart-77771-default-rtdb.firebaseio.com",
+  projectId: "daykart-77771",
+  storageBucket: "daykart-77771.firebasestorage.app",
+  messagingSenderId: "533666061468",
+  appId: "1:533666061468:web:f56261c5f1cbcc0d776159",
+  measurementId: "G-EDMNTSSJGY"
+};
+
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+
+      function displayCharts() {
+        db.collection("userSubmissions").get()
+          .then(querySnapshot => {
+            let productCounts = {};
+            let referralCounts = {};
+            let productUsers = {};
+
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              
+              if (data.productDetails) {
+                productCounts[data.productDetails] = (productCounts[data.productDetails] || 0) + 1;
+
+                if (!productUsers[data.productDetails]) {
+                  productUsers[data.productDetails] = [];
+                }
+                productUsers[data.productDetails].push(data.name);
+              }
+
+              if (data.refcode) {
+                referralCounts[data.refcode] = (referralCounts[data.refcode] || 0) + 1;
+              }
+            });
+
+            createPieChart("productChart", "Product Selection", productCounts, productUsers);
+            createPieChart("referralCodeChart", "Referral Code Usage", referralCounts);
+          })
+          .catch(error => {
+            console.error("Error fetching data: ", error);
+          });
+      }
+
+      function createPieChart(chartId, title, dataCounts, productUsers = null) {
+        const ctx = document.getElementById(chartId).getContext('2d');
+        const data = {
+          labels: Object.keys(dataCounts),
+          datasets: [{
+            data: Object.values(dataCounts),
+            backgroundColor: ['#FF5C5C', '#FF8C42', '#F1C40F', '#27AE60', '#8E44AD', '#3498DB', '#E74C3C', '#2C3E50'],
+            hoverOffset: 4
+          }]
+        };
+
+        const config = {
+          type: 'pie',
+          data: data,
+          options: {
+            responsive: true,
+            onClick: function(e, elements) {
+              if (elements.length > 0) {
+                const index = elements[0].index;
+                const selectedProduct = data.labels[index];
+                document.getElementById("selectedProduct").innerText = selectedProduct;
+                displayUsersForProduct(selectedProduct, productUsers[selectedProduct]);
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+              },
+              tooltip: {
+                callbacks: {
+                  label: function(tooltipItem) {
+                    return tooltipItem.label + ': ' + tooltipItem.raw + ' selections';
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        new Chart(ctx, config);
+      }
+
+      function displayUsersForProduct(product, users) {
+        const userListElement = document.getElementById("userList");
+        userListElement.innerHTML = '';
+        if (users && users.length > 0) {
+          users.forEach(user => {
+            const li = document.createElement("li");
+            li.textContent = user;
+            userListElement.appendChild(li);
+          });
+        } else {
+          userListElement.innerHTML = '<li>No users have selected this product yet.</li>';
+        }
+      }
+
+      window.onload = displayCharts;
+    </script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+      #charts {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+      canvas {
+        margin-bottom: 30px;
+      }
+      #productDetails {
+        margin-top: 30px;
+      }
+    </style>
+</head>
+<body>
+
+<div id="charts">
+    <h2>Product Selection and Referral Code Usage</h2>
+    
+    <!-- Product selection Pie chart -->
+    <canvas id="productChart" width="400" height="400"></canvas>
+    
+    <!-- Display who bought the product -->
+    <div id="productDetails">
+        <h3>Users Who Bought: <span id="selectedProduct"></span></h3>
+        <ul id="userList"></ul>
+    </div>
+    
+    <!-- Referral Code usage Pie chart -->
+    <canvas id="referralCodeChart" width="400" height="400"></canvas>
+</div>
+
+</body>
+</html>
