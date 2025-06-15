@@ -36,7 +36,7 @@
           signOut(auth)
             .then(() => {
               alert("Logged out successfully!");
-              window.location.href = "../login.html";
+              window.location.href = "login.html";
             })
             .catch((error) => {
               console.error("Logout Error:", error);
@@ -60,7 +60,7 @@
 
   <main class="log-main">
     <h1>You have been logged out</h1>
-    <p>Thanks for visiting. <a href="../login.html">Login again</a></p>
+    <p>Thanks for visiting. <a href="/account/login.html">Login again</a></p>
     <button id="logoutBtn">Click here to logout again</button>
   </main>
 </body>

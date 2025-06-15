@@ -1,5 +1,5 @@
 // js/address.js
-import { auth, db } from "./firebase.js";
+import { auth, db } from "./firebase-config.js";
 import {
   doc,
   getDoc,

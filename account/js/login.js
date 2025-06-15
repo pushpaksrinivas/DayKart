@@ -21,33 +21,36 @@ document.querySelector('.register-btn').addEventListener('click', () => containe
 document.querySelector('.login-btn').addEventListener('click', () => container.classList.remove('active'));
 
 // Helper: Referral code generator
-function generateReferralCodeFromInput(username, regno) {
+function generateReferralCodeFromInput(username, email) {
   const getSafeString = (str, len, fromEnd = false) => {
     if (!str) return '';
     return fromEnd
       ? str.slice(-len).padStart(len, 'X')
       : str.slice(0, len).padEnd(len, 'X');
   };
+
   const part1 = getSafeString(username, 2).toUpperCase();
-  const part2 = getSafeString(regno, 2, true);
+  const part2 = getSafeString(email, 2, true).toUpperCase(); // Take last 2 chars of email
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let randomPart = '';
   for (let i = 0; i < 4; i++) {
     randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
   }
+
   return `${part1}${part2}${randomPart}`;
 }
 
-async function generateUniqueReferralCode(username = "", regno = "") {
+async function generateUniqueReferralCode(username = "", email = "") {
   let referralCode, isUnique = false;
   while (!isUnique) {
-    referralCode = generateReferralCodeFromInput(username, regno);
+    referralCode = generateReferralCodeFromInput(username, email);
     const q = query(collection(db, "users"), where("referralCode", "==", referralCode));
     const snapshot = await getDocs(q);
     if (snapshot.empty) isUnique = true;
   }
   return referralCode;
 }
+
 
 window.addEventListener('DOMContentLoaded', () => {
   const savedEmail = localStorage.getItem('rememberedEmail');
@@ -87,7 +90,6 @@ document.getElementById("loginBtn").onclick = async () => {
 // Register
 document.getElementById("signupBtn").onclick = async () => {
   const username = document.getElementById("username").value;
-  const regno = document.getElementById("regno").value;
   const email = document.getElementById("signupEmail").value;
   const password = document.getElementById("signupPassword").value;
   const confirm = document.getElementById("confirmpass").value;
@@ -98,20 +100,22 @@ document.getElementById("signupBtn").onclick = async () => {
   try {
     const userCred = await createUserWithEmailAndPassword(auth, email, password);
     const uid = userCred.user.uid;
-    const referralCode = await generateUniqueReferralCode(username, regno);
+    const referralCode = await generateUniqueReferralCode(username, email);
+
     await setDoc(doc(db, "users", uid), {
       username,
-      regno,
       email,
       referralCode,
       referredBy: refInput || null,
       uid
     });
+
     window.location.href = "/account/dashboard.html";
   } catch (err) {
     alert("Signup error: " + err.message);
   }
 };
+
 
 // Google Signup/Login
 document.querySelectorAll("#googleSignup").forEach(btn => {
