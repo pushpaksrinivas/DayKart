@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+  <nav>
+    <a href="dashboard.html" class="active"><i class='bx bxs-id-card'></i> Dashboard</a>
+    <a href="account.html"><i class='bx bxs-user'></i> Acc Details</a>
+    <a href="address.html"><i class='bx  bx-book'></i>  Address</a>
+    <a href="orders.html"><i class='bx bxs-cart'></i> Orders</a>
+    <a href="logout.html"><i class='bx bxs-log-out'></i> Logout</a>
+  </nav>
+
+  <main>
+    <h1>User Dashboard</h1>
+    <div class="card" id="userDetails">
+      <p><strong>Name:</strong> <span id="name">Loading...</span></p>
+      <p><strong>Phone:</strong> <span id="phone"></span></p>
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>Reg. No:</strong> <span id="regno"></span></p>
+      <p><strong>College:</strong> <span id="collegeName"></span></p>
+      <p><strong>Referral Code:</strong> <span id="referral"></span></p>
+      <hr>
+      <p><strong>Address:</strong></p>
+      <p><span id="line1"></span></p>   
+      <p><span id="line2"></span></p>
+      <p><span id="street"></span></p>
+      <p><span id="city"></span>, <span id="dist"></span></p>
+      <p><span id="state"></span> - <span id="pincode"></span></p>
+    </div>
+  </main>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

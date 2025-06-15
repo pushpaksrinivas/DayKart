@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Navigation Bar */
+nav {
+  background-color: #ffffff;
+  width: 100%;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav a {
+  margin: 0 15px;
+  color: #333;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  transition: 0.3s ease;
+}
+
+nav a:hover,
+nav a.active {
+  background-color: #7494ec;
+  color: white;
+}
+
+/* Main Content */
+main {
+  width: 100%;
+  max-width: 800px;
+  margin: 40px 20px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+main h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* User Details Card */
+.card {
+  padding: 20px;
+  background-color: #f7f9ff;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+}
+
+.card p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #444;
+}
+
+.card strong {
+  font-weight: 600;
+  color: #222;
+}
+
+.card hr {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  nav {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav a {
+    margin: 5px 0;
+  }
+
+  main {
+    padding: 20px;
+    margin: 20px 10px;
+  }
+
+  main h1 {
+    font-size: 24px;
+  }
+
+  .card p {
+    font-size: 14px;
+  }
+}
+
+/* ========== FORM STYLING FOR account.html ========== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: #f7f9ff;
+  padding: 25px 30px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+form label {
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  margin-top: 5px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  border-color: #7494ec;
+  box-shadow: 0 0 0 2px rgba(116, 148, 236, 0.2);
+}
+
+form button {
+  margin-top: 20px;
+  background-color: #7494ec;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button:hover {
+  background-color: #5a78d1;
+}
+
+/* ========== LOADING AND POPUP FEEDBACK ========== */
+#loading,
+#popup {
+  margin-top: 20px;
+  background-color: #e8f0ff;
+  border: 1px solid #b4d1ff;
+  color: #2c4f99;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+#loading img {
+  width: 24px;
+  height: 24px;
+}
+
+#popup {
+  background-color: #d4edda;
+  border-color: #a0d4a6;
+  color: #155724;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 600px) {
+  form {
+    padding: 20px;
+  }
+
+  form label {
+    font-size: 14px;
+  }
+
+  form input {
+    font-size: 14px;
+  }
+
+  form button {
+    font-size: 15px;
+  }
+
+  #loading,
+  #popup {
+    font-size: 13px;
+  }
+}
+
+/* ========== LOGOUT PAGE STYLING ========== */
+
+.log-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.log-main h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.log-main p {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.log-main a {
+  color: #7494ec;
+  text-decoration: underline;
+}
+
+#logoutBtn {
+  padding: 12px 20px;
+  background-color: #7494ec;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#logoutBtn:hover {
+  background-color: #5a78d1;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .log-main h1 {
+    font-size: 22px;
+  }
+
+  .log-main p {
+    font-size: 14px;
+  }
+
+  #logoutBtn {
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+}
