@@ -28,6 +28,12 @@ onAuthStateChanged(auth, async (user) => {
       document.getElementById("dist").textContent = address.dist || "";
       document.getElementById("state").textContent = address.state || "";
       document.getElementById("pincode").textContent = address.pincode || "";
+
+      // Check if essential details are missing
+      if (!data.name || !data.phone || !data.regno) {
+        showPopup();
+      }
+
     } else {
       document.getElementById("userDetails").textContent = "User data not found.";
     }
@@ -35,3 +41,16 @@ onAuthStateChanged(auth, async (user) => {
     window.location.href = "login.html";
   }
 });
+
+function showPopup() {
+  const popup = document.createElement("div");
+  popup.className = "popup-overlay";
+  popup.innerHTML = `
+    <div class="popup-box">
+      <h2>Complete Your Profile</h2>
+      <p>Please fill in your account details to continue using your dashboard features.</p>
+      <a href="account.html"><button>Go to Account Page</button></a>
+    </div>
+  `;
+  document.body.appendChild(popup);
+}

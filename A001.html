@@ -6,119 +6,183 @@
     <title>Document</title>
     <link rel="stylesheet" href="product.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 </head>
 <body>
-    <div class = "card-wrapper">
-  <div class = "card">
-    <!-- card left -->
-    <div class = "product-imgs">
-      <div class = "img-display">
-        <div class = "img-showcase">
-          <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg" alt = "shoe image">
-          <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg" alt = "shoe image">
-          <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg" alt = "shoe image">
-          <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg" alt = "shoe image">
+      <header class="l-header" id="header">
+            <nav class="nav bd-grid">
+                <div class="nav-toggle" id="nav-toggle">
+                    <i class="bx bxs-grid"></i>
+                </div>
+
+                <a href="#" class="nav-logo">DayKart</a>
+
+                <div class="nav-menu" id="nav-menu">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="#home" class="nav-link ">Home</a></li>
+                        <li class="nav-item"><a href="#featured" class="nav-link">Featured</a></li>
+                        <li class="nav-item"><a href="#women" class="nav-link">Fancy</a></li>
+                        <li class="nav-item"><a href="#new" class="nav-link">New</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link active">Products</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-shop">
+                    <a href="#"><i class="bx bx-shopping-bag"></i></a>
+                    <a href="account/dashboard.html"><i class="bx bx-user"></i></a>
+                </div>
+            </nav>
+        </header>
+
+        <div class = "card-wrapper">
+      <div class = "card">
+        <!-- card left -->
+        <div class = "product-imgs">
+          <div class = "img-display">
+            <div class = "img-showcase">
+              <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg" alt = "shoe image">
+              <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg" alt = "shoe image">
+              <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg" alt = "shoe image">
+              <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg" alt = "shoe image">
+            </div>
+          </div>
+          <div class = "img-select">
+            <div class = "img-item">
+              <a href = "#" data-id = "1">
+                <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg" alt = "shoe image">
+              </a>
+            </div>
+            <div class = "img-item">
+              <a href = "#" data-id = "2">
+                <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg" alt = "shoe image">
+              </a>
+            </div>
+            <div class = "img-item">
+              <a href = "#" data-id = "3">
+                <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg" alt = "shoe image">
+              </a>
+            </div>
+            <div class = "img-item">
+              <a href = "#" data-id = "4">
+                <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg" alt = "shoe image">
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class = "img-select">
-        <div class = "img-item">
-          <a href = "#" data-id = "1">
-            <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg" alt = "shoe image">
-          </a>
-        </div>
-        <div class = "img-item">
-          <a href = "#" data-id = "2">
-            <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg" alt = "shoe image">
-          </a>
-        </div>
-        <div class = "img-item">
-          <a href = "#" data-id = "3">
-            <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg" alt = "shoe image">
-          </a>
-        </div>
-        <div class = "img-item">
-          <a href = "#" data-id = "4">
-            <img src = "https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg" alt = "shoe image">
-          </a>
+        <!-- card right -->
+        <div class = "product-content">
+          <h2 class = "product-title">nike shoes</h2>
+          <a href = "#" class = "product-link">visit nike store</a>
+          <div class = "product-rating">
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star"></i>
+            <i class = "fas fa-star-half-alt"></i>
+            <span>4.7(21)</span>
+          </div>
+
+          <div class = "product-price">
+            <p class = "last-price">MRP Price: <span>₹257.00</span></p>
+            <p class = "new-price">Offer Price: <span>₹249.00 (5%)</span></p>
+          </div>
+
+          <div class = "product-detail">
+            <h2>about this item: </h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo eveniet veniam tempora fuga tenetur placeat sapiente architecto illum soluta consequuntur, aspernatur quidem at sequi ipsa!</p>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, perferendis eius. Dignissimos, labore suscipit. Unde.</p>
+            <ul>
+              <li>Color: <span>Black</span></li>
+              <li>Available: <span>in stock</span></li>
+              <li>Category: <span>Shoes</span></li>
+              <li>Shipping Area: <span>All over the world</span></li>
+              <li>Shipping Fee: <span>Free</span></li>
+              <li>Replacement: <span>No Refund only Replacement</span></li>
+            </ul>
+          </div>
+
+          <div class = "purchase-info">
+            <input type = "number" min = "0" value = "1">
+            <button type = "button" class = "btn">
+              Add to Cart <i class = "fas fa-shopping-cart"></i>
+            </button>
+            <button type = "button" class = "btn">Buy Now</button>
+          </div>
+
+          <div class = "social-links">
+            <p>Share At: </p>
+            <a href = "https://wa.me/?text=https://google.com" target="_blank">
+              <i class = "fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" target="_blank">
+              <i class = "fab fa-facebook-f"></i>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url=https://example.com&text=Check%20this%20out!" target="_blank">
+              <i class = "fab fa-twitter"></i>
+            </a>
+            
+          </div>
         </div>
       </div>
     </div>
-    <!-- card right -->
-    <div class = "product-content">
-      <h2 class = "product-title">nike shoes</h2>
-      <a href = "#" class = "product-link">visit nike store</a>
-      <div class = "product-rating">
-        <i class = "fas fa-star"></i>
-        <i class = "fas fa-star"></i>
-        <i class = "fas fa-star"></i>
-        <i class = "fas fa-star"></i>
-        <i class = "fas fa-star-half-alt"></i>
-        <span>4.7(21)</span>
-      </div>
-
-      <div class = "product-price">
-        <p class = "last-price">MRP Price: <span>₹257.00</span></p>
-        <p class = "new-price">Offer Price: <span>₹249.00 (5%)</span></p>
-      </div>
-
-      <div class = "product-detail">
-        <h2>about this item: </h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo eveniet veniam tempora fuga tenetur placeat sapiente architecto illum soluta consequuntur, aspernatur quidem at sequi ipsa!</p>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, perferendis eius. Dignissimos, labore suscipit. Unde.</p>
-        <ul>
-          <li>Color: <span>Black</span></li>
-          <li>Available: <span>in stock</span></li>
-          <li>Category: <span>Shoes</span></li>
-          <li>Shipping Area: <span>All over the world</span></li>
-          <li>Shipping Fee: <span>Free</span></li>
-        </ul>
-      </div>
-
-      <div class = "purchase-info">
-        <input type = "number" min = "0" value = "1">
-        <button type = "button" class = "btn">
-          Buy Now <i class = "fas fa-shopping-cart"></i>
-        </button>
-        <!-- <button type = "button" class = "btn">Compare</button> -->
-      </div>
-
-      <div class = "social-links">
-        <p>Share At: </p>
-        <a href = "https://wa.me/?text=https://google.com" target="_blank">
-          <i class = "fab fa-whatsapp"></i>
-        </a>
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https://example.com" target="_blank">
-          <i class = "fab fa-facebook-f"></i>
-        </a>
-        <a href="https://twitter.com/intent/tweet?url=https://example.com&text=Check%20this%20out!" target="_blank">
-          <i class = "fab fa-twitter"></i>
-        </a>
-        
-      </div>
+    <section class="suggested-products">
+  <h2>You May Also Like</h2>
+  <div class="suggested-container">
+    <div class="suggested-item" onclick="location.href='product.html?id=101'">
+      <img src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg" alt="Product 1" />
+      <p>Smartwatch Pro</p>
+      <p class = "new-price"> <span>₹249.00 (5%)</span></p>
+    </div>
+    <div class="suggested-item" onclick="location.href='product.html?id=102'">
+      <img src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg" alt="Product 2" />
+      <p>Wireless Earbuds</p>
+      <p class = "new-price"> <span>₹249.00 (5%)</span></p>
+    </div>
+    <div class="suggested-item" onclick="location.href='product.html?id=103'">
+      <img src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg" alt="Product 3" />
+      <p>Fitness Tracker</p>
+      <p class = "new-price"> <span>₹249.00 (5%)</span></p>
     </div>
   </div>
-</div>
-<script>
-    const imgs = document.querySelectorAll('.img-select a');
-const imgBtns = [...imgs];
-let imgId = 1;
+</section>
 
-imgBtns.forEach((imgItem) => {
-    imgItem.addEventListener('click', (event) => {
-        event.preventDefault();
-        imgId = imgItem.dataset.id;
-        slideImage();
-    });
-});
+    <footer class="footer section">
+                <div class="footer-container bd-grid">
+                    <div class="footer-box">
+                        <h3 class="footer-title">DayKart</h3>
+                        <p class="footer-description">New Collection of Hostel needs 2025</p>
+                    </div>
 
-function slideImage(){
-    const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
+                    <div class="footer-box">
+                        <h3 class="footer-title">EXPLORE</h3>
+                        <ul>
+                            <li><a href="#home" class="footer-link">Home</a></li>
+                            <li><a href="#featured" class="footer-link">Featured</a></li>
+                            <li><a href="#women" class="footer-link">Fancy</a></li>
+                            <li><a href="#new" class="footer-link">New</a></li>
+                        </ul>
+                    </div>
 
-    document.querySelector('.img-showcase').style.transform = `translateX(${- (imgId - 1) * displayWidth}px)`;
-}
+                    <div class="footer-box">
+                        <h3 class="footer-title">SUPPORT</h3>
+                        <ul>
+                            <li><a href="#home" class="footer-link">Product Help</a></li>
+                            <li><a href="#featured" class="footer-link">Customer Care</a></li>
+                            <li><a href="/policies/privacy.html" class="footer-link" target="_blank">Privacy Policy</a></li>
+                        </ul>
+                    </div>
 
-window.addEventListener('resize', slideImage);
-</script>
+                    <div class="footer-box">
+                        <a href="#" class="footer-social"><i class="bx bxl-facebook"></i></a>
+                        <a href="#" class="footer-social"><i class="bx bxl-instagram"></i></a>
+                        <a href="#" class="footer-social"><i class="bx bxl-whatsapp"></i></a>
+                        <a href="#" class="footer-social"><i class="bx bxl-google"></i></a>
+                    </div>
+                </div>
+
+                <p class="footer-copy">&#169; 2025 <a href="https://codepen.io/leonam-silva-de-souza" target="_blank">DayKart</a>. All rights reserved</p>
+            </footer>
+    <script src="product.js"></script>
 </body>
 </html>
