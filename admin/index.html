@@ -3,36 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Panel</title>
+  <title>Admin - Add Product</title>
   <link rel="stylesheet" href="style.css" />
-  <script type="module" src="admin.js" defer></script>
 </head>
 <body>
   <div class="admin-container">
-    <h1>Admin Dashboard</h1>
-
-    <section class="product-editor">
-      <h2>Add / Edit Product</h2>
-      <form id="productForm">
-        <input type="text" id="productName" placeholder="Product Name" required />
-        <input type="number" id="productMRP" placeholder="MRP" required />
-        <input type="number" id="productOfferPrice" placeholder="Offer Price" required />
-        <input type="number" id="productStock" placeholder="Stock" required />
-        <input type="text" id="productCategory" placeholder="Category" required />
-        <input type="file" id="productImage" accept="image/*" multiple required />
-        <button type="submit">Save Product</button>
-      </form>
-    </section>
-
-    <section class="order-review">
-      <h2>Orders</h2>
-      <div id="ordersList"></div>
-    </section>
-
-    <section class="total-summary">
-      <h2>Total Revenue</h2>
-      <p id="totalRevenue">₹0</p>
-    </section>
+    <h2>Add New Product</h2>
+    <form id="productForm">
+      <input type="text" id="title" placeholder="Product Title" required />
+      <textarea id="description" placeholder="Product Description" required></textarea>
+      <input type="text" id="images" placeholder="Image URLs (comma separated)" required />
+      <input type="number" id="mrp" placeholder="MRP" required />
+      <input type="number" id="offerPrice" placeholder="Offer Price" required />
+      <input type="number" id="quantity" placeholder="Available Quantity" required />
+      <input type="text" id="category" placeholder="Category (e.g. electronics)" required />
+      <input type="text" id="link" placeholder="Product Page Link or ID" required />
+      <button type="submit">Add Product</button>
+    </form>
+    <p id="status"></p>
   </div>
+
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

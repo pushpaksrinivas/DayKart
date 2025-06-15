@@ -1,66 +1,69 @@
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
-  padding: 20px;
+  padding: 2rem;
 }
 
 .admin-container {
-  max-width: 900px;
+  background: #fff;
+  padding: 2rem;
+  max-width: 500px;
   margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
 }
-
-h1, h2 {
-  color: #333;
-  margin-bottom: 15px;
+h2 {
+  margin-bottom: 1rem;
+  text-align: center;
 }
-
-form {
-  display: grid;
-  gap: 10px;
-  margin-bottom: 30px;
-}
-
-input, button {
-  padding: 10px;
-  border-radius: 8px;
+form input,
+form textarea,
+form button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  border-radius: 5px;
   border: 1px solid #ccc;
 }
-
-button {
+form button {
   background: #7494ec;
   color: white;
   border: none;
   cursor: pointer;
 }
+form button:hover {
+  background: #5a78d1;
+}
+#status {
+  text-align: center;
+  margin-top: 1rem;
+  color: green;
+}
+
+.product-list {
+  display: grid;
+  gap: 20px;
+}
+
+.product-card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+button {
+  margin-right: 10px;
+  padding: 6px 14px;
+  background: #7494ec;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
 
 button:hover {
   background: #5a78d1;
-}
-
-#ordersList {
-  max-height: 300px;
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 8px;
-  background: #f9f9f9;
-}
-
-.order {
-  border-bottom: 1px solid #ddd;
-  padding: 10px 0;
-}
-
-#totalRevenue {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-input[type="file"] {
-  padding: 10px;
-  background: #f1f1f1;
 }

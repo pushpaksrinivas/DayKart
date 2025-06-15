@@ -37,7 +37,7 @@ function generateReferralCodeFromInput(username, email) {
     randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
-  return `${part1}${part2}${randomPart}`;
+  return `₹{part1}₹{part2}₹{randomPart}`;
 }
 
 async function generateUniqueReferralCode(username = "", email = "") {
@@ -79,7 +79,7 @@ document.getElementById("loginBtn").onclick = async () => {
       localStorage.removeItem('rememberedEmail');
     }
 
-    window.location.href = "/account/dashboard.html";
+    window.location.href = "/home.html";
   } catch (err) {
     errorPopup.textContent = err.message;
     errorPopup.style.display = "block";

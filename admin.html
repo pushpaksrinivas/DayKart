@@ -246,13 +246,13 @@
           // Create a new row for the user submission
           const row = document.createElement("tr");
           row.innerHTML = `
-            <td>${data.name}</td>
-            <td>${data.regno}</td>
-            <td>${data.email}</td>
-            <td>${data.phone}</td>
-            <td>${data.college}</td>
-            <td>${product}</td>
-            <td>${refcode || "N/A"}</td>
+            <td>₹{data.name}</td>
+            <td>₹{data.regno}</td>
+            <td>₹{data.email}</td>
+            <td>₹{data.phone}</td>
+            <td>₹{data.college}</td>
+            <td>₹{product}</td>
+            <td>₹{refcode || "N/A"}</td>
           `;
 
           userTableBody.appendChild(row);  // Add the row to the table body
@@ -279,7 +279,7 @@
       sortedProducts.forEach(([product, count]) => {
         const productItem = document.createElement("div");
         productItem.classList.add("list-item");
-        productItem.textContent = `${product}: ${count} sale(s)`;
+        productItem.textContent = `₹{product}: ₹{count} sale(s)`;
         topProductsContainer.appendChild(productItem);
       });
     }
@@ -297,7 +297,7 @@
       sortedReferrals.forEach(([refcode, count]) => {
         const referralItem = document.createElement("div");
         referralItem.classList.add("list-item");
-        referralItem.textContent = `${refcode}: ${count} referral(s)`;
+        referralItem.textContent = `₹{refcode}: ₹{count} referral(s)`;
         topReferralsContainer.appendChild(referralItem);
       });
     }

@@ -1,22 +1,23 @@
-const imgs = document.querySelectorAll('.img-select a');
-const imgBtns = [...imgs];
-let imgId = 1;
+// Firebase imports
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from './firebase-config.js';
 
-imgBtns.forEach((imgItem) => {
-    imgItem.addEventListener('click', (event) => {
-        event.preventDefault();
-        imgId = imgItem.dataset.id;
-        slideImage();
-    });
-});
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-function slideImage(){
-    const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
-
-    document.querySelector('.img-showcase').style.transform = `translateX(${- (imgId - 1) * displayWidth}px)`;
-}
-
-window.addEventListener('resize', slideImage);
+const auth = getAuth();
+const dbRef = getFirestore();
 
 // Showing Menu
 
@@ -72,80 +73,128 @@ window.onscroll = () => {
     if(this.scrollY >= 200) nav.classList.add('scroll-header'); else nav.classList.remove('scroll-header');
 }
 
-// Firebase setup (make sure this is already initialized)
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
-
-// =======================
-// ADD TO CART FUNCTION
-// =======================
-const addToCartBtns = document.querySelectorAll('.add-to-cart-btn');
-
-addToCartBtns.forEach(button => {
-    button.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) return alert('Please log in to add items to cart.');
-
-        const productId = button.dataset.id;
-        const title = button.dataset.title;
-        const price = parseFloat(button.dataset.price);
-        const image = button.dataset.image || '';
-
-        const cartRef = collection(db, "carts");
-        await addDoc(cartRef, {
-            userId: user.uid,
-            productId,
-            title,
-            price,
-            image,
-            quantity: 1,
-            addedAt: new Date()
-        });
-
-        updateCartIndicator();
-        alert("Product added to cart!");
-    });
-});
-
-// =======================
-// UPDATE CART ICON COUNT
-// =======================
-async function updateCartIndicator() {
-    const user = auth.currentUser;
-    if (!user) return;
-
-    const cartRef = collection(db, "carts");
-    const q = query(cartRef, where("userId", "==", user.uid));
-    const querySnapshot = await getDocs(q);
-
-    const cartCount = querySnapshot.size;
-    const bagIcon = document.querySelector('.bx-shopping-bag');
-
-    // Add count indicator as badge
-    if (bagIcon) {
-        let badge = document.querySelector('.cart-count-badge');
-        if (!badge) {
-            badge = document.createElement('span');
-            badge.className = 'cart-count-badge';
-            bagIcon.parentElement.appendChild(badge);
-        }
-        badge.innerText = cartCount;
-    }
+// ========== IMAGE SLIDER ==========
+let imgId = 1;
+function slideImage() {
+  const displayWidth = document.querySelector('.img-showcase img:first-child')?.clientWidth || 0;
+  document.querySelector('.img-showcase').style.transform = `translateX(-₹{(imgId - 1) * displayWidth}px)`;
 }
+window.addEventListener('resize', slideImage);
 
-// Call it on page load (if user is logged in)
+// ========== PRODUCT DATA LOADING ==========
+document.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+  if (!productId) return alert("No product ID found");
+
+  const docRef = doc(dbRef, "products", productId);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) return alert("Product not found");
+
+  const data = docSnap.data();
+  document.getElementById('product-name').textContent = data.name;
+  document.getElementById('offer-price').textContent = data.offerPrice;
+  document.getElementById('mrp').textContent = data.mrp;
+  document.getElementById('available-qty').textContent = data.quantity;
+  document.getElementById('product-description').textContent = data.description;
+
+  const discount = Math.round(((data.mrp - data.offerPrice) / data.mrp) * 100);
+  document.getElementById('discount').textContent = discount;
+
+  const imgShowcase = document.querySelector('.img-showcase');
+  const imgSelect = document.querySelector('.img-select');
+  imgShowcase.innerHTML = '';
+  imgSelect.innerHTML = '';
+
+  data.images.forEach((imgUrl, index) => {
+    imgShowcase.innerHTML += `<img src="₹{imgUrl}" alt="product image">`;
+    imgSelect.innerHTML += `
+      <div class="img-item">
+        <a href="#" data-id="₹{index + 1}">
+          <img src="₹{imgUrl}" alt="product thumbnail">
+        </a>
+      </div>`;
+  });
+
+  // Update image slider
+  document.querySelectorAll('.img-select a').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      imgId = parseInt(a.dataset.id);
+      slideImage();
+    });
+  });
+
+  slideImage();
+
+  // Add product ID to buttons
+  document.querySelector('.add-to-cart-btn')?.setAttribute('data-id', productId);
+  document.querySelector('.buy-now-btn')?.setAttribute('data-id', productId);
+});
+
+// ========== ADD TO CART ==========
+document.querySelector('.add-to-cart-btn')?.addEventListener('click', async (e) => {
+  const user = auth.currentUser;
+  if (!user) return alert("Please log in to add items to cart.");
+
+  const button = e.currentTarget;
+  const productId = button.dataset.id;
+  const title = document.getElementById('product-name').textContent;
+  const price = parseFloat(document.getElementById('offer-price').textContent);
+  const image = document.querySelector('.img-showcase img')?.src || "";
+
+  const cartRef = collection(dbRef, "carts");
+  await addDoc(cartRef, {
+    userId: user.uid,
+    productId,
+    title,
+    price,
+    image,
+    quantity: 1,
+    addedAt: new Date()
+  });
+
+  updateCartIndicator();
+  alert("Product added to cart!");
+});
+
+// ========== BUY NOW ==========
+document.querySelector('.buy-now-btn')?.addEventListener('click', () => {
+  const productId = document.querySelector('.buy-now-btn').dataset.id;
+  localStorage.setItem("buyNowProductId", productId);
+  window.location.href = "checkout.html?id=" + productId;
+});
+
+// ========== UPDATE CART INDICATOR ==========
+async function updateCartIndicator() {
+  const user = auth.currentUser;
+  if (!user) return;
+  const q = query(collection(dbRef, "carts"), where("userId", "==", user.uid));
+  const querySnapshot = await getDocs(q);
+
+  const count = querySnapshot.size;
+  const bagIcon = document.querySelector('.bx-shopping-bag');
+  if (bagIcon) {
+    let badge = document.querySelector('.cart-count-badge');
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'cart-count-badge';
+      bagIcon.parentElement.appendChild(badge);
+    }
+    badge.textContent = count;
+  }
+}
 auth.onAuthStateChanged(user => {
-    if (user) updateCartIndicator();
+  if (user) updateCartIndicator();
 });
 
-const buyNowBtn = document.querySelector('.buy-now-btn');
+// ========== REDUCE PRODUCT QUANTITY ==========
+async function reduceQuantity(productId, quantityToReduce) {
+  const productRef = doc(dbRef, 'products', productId);
+  const productSnap = await getDoc(productRef);
+  if (!productSnap.exists()) return;
 
-buyNowBtn?.addEventListener('click', () => {
-    const productId = buyNowBtn.dataset.id;
-    // Optionally pass ID or store in localStorage
-    localStorage.setItem("buyNowProductId", productId);
-    window.location.href = "/checkout.html"; // Adjust path as needed
-});
+  const currentQty = productSnap.data().quantity;
+  const newQty = Math.max(currentQty - quantityToReduce, 0);
+  await updateDoc(productRef, { quantity: newQty });
+}

@@ -58,8 +58,8 @@
       </div>
 
       <div class = "product-price">
-        <p class = "last-price">Old Price: <span>$257.00</span></p>
-        <p class = "new-price">New Price: <span>$249.00 (5%)</span></p>
+        <p class = "last-price">Old Price: <span>₹257.00</span></p>
+        <p class = "new-price">New Price: <span>₹249.00 (5%)</span></p>
       </div>
 
       <div class = "product-detail">
@@ -115,7 +115,7 @@ imgBtns.forEach((imgItem) => {
 function slideImage(){
     const displayWidth = document.querySelector('.img-showcase img:first-child').clientWidth;
 
-    document.querySelector('.img-showcase').style.transform = `translateX(${- (imgId - 1) * displayWidth}px)`;
+    document.querySelector('.img-showcase').style.transform = `translateX(₹{- (imgId - 1) * displayWidth}px)`;
 }
 
 window.addEventListener('resize', slideImage);

@@ -1,7 +1,10 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs
-} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
@@ -17,49 +20,39 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Product Add/Edit
-const productForm = document.getElementById("productForm");
+const form = document.getElementById('productForm');
+const status = document.getElementById('status');
 
-productForm.addEventListener("submit", async (e) => {
+form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const name = productForm.productName.value;
-  const mrp = parseFloat(productForm.productMRP.value);
-  const offerPrice = parseFloat(productForm.productOfferPrice.value);
-  const stock = parseInt(productForm.productStock.value);
-  const category = productForm.productCategory.value;
-  const imageFiles = productForm.productImages.files;
-
-  if (!imageFiles.length) {
-    alert("Please select at least one image.");
-    return;
-  }
-
-  const imageUrls = [];
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const images = document.getElementById('images').value.split(',').map(url => url.trim());
+  const mrp = parseFloat(document.getElementById('mrp').value);
+  const offerPrice = parseFloat(document.getElementById('offerPrice').value);
+  const quantity = parseInt(document.getElementById('quantity').value);
+  const category = document.getElementById('category').value;
+  const link = document.getElementById('link').value;
 
   try {
-    // Upload all images to Firebase Storage
-    for (let file of imageFiles) {
-      const storageRef = ref(storage, `product-images/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
-      imageUrls.push(url);
-    }
-
-    // Store product in Firestore with multiple image URLs
     await addDoc(collection(db, "products"), {
-      name,
+      title,
+      description,
+      images,
       mrp,
       offerPrice,
-      stock,
+      discountPercent: Math.round(((mrp - offerPrice) / mrp) * 100),
+      quantity,
       category,
-      imageUrls
+      link,
+      createdAt: serverTimestamp()
     });
 
-    alert("Product uploaded successfully!");
-    productForm.reset();
-  } catch (err) {
-    console.error(err);
-    alert("Failed to upload product: " + err.message);
+    form.reset();
+    status.textContent = "✅ Product added successfully!";
+  } catch (error) {
+    console.error("Error adding product: ", error);
+    status.textContent = "❌ Error adding product.";
   }
 });
