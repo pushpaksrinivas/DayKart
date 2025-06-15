@@ -79,7 +79,7 @@ document.getElementById("loginBtn").onclick = async () => {
       localStorage.removeItem('rememberedEmail');
     }
 
-    window.location.href = "/home.html";
+    window.location.href = "/index.html";
   } catch (err) {
     errorPopup.textContent = err.message;
     errorPopup.style.display = "block";
@@ -110,7 +110,7 @@ document.getElementById("signupBtn").onclick = async () => {
       uid
     });
 
-    window.location.href = "/account/dashboard.html";
+    window.location.href = "/index.html";
   } catch (err) {
     alert("Signup error: " + err.message);
   }
@@ -138,7 +138,7 @@ document.querySelectorAll("#googleSignup").forEach(btn => {
           uid
         });
       }
-      window.location.href = "/account/dashboard.html";
+      window.location.href = "/index.html";
     } catch (err) {
       alert("Google signup error: " + err.message);
     }
