@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Add Product</title>
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="UTF-8">
+  <title>Admin Earnings Dashboard</title>
+  <link rel="stylesheet" href="wallet.css">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
-  <header class="l-header" id="header">
+    <header class="l-header" id="header">
             <nav class="nav bd-grid">
                 <div class="nav-toggle" id="nav-toggle">
                     <i class="bx bxs-grid"></i>
@@ -32,38 +31,32 @@
 </div>
             </nav>
         </header>
-  <div id="admin-container" style="display: none;">
-    <h2>Add New Product</h2>
-    <form id="productForm">
-      <label>Product Title</label>
-      <input type="text" id="title" required />
+  <div class="container">
+    <h2>Admin Earnings Dashboard</h2>
+    <div class="card">
+      <h3>Total Earnings</h3>
+      <p id="total-earnings">₹0</p>
+    </div>
 
-      <label>Description</label>
-      <textarea id="description" required></textarea>
-
-      <label>MRP (₹)</label>
-      <input type="number" id="mrp" required />
-
-      <label>Offer Price (₹)</label>
-      <input type="number" id="offerPrice" required />
-
-      <label>Quantity</label>
-      <input type="number" id="quantity" required />
-
-      <label>Category</label>
-      <input type="text" id="category" required />
-
-      <label>Image URLs (comma-separated)</label>
-      <input type="text" id="images" required />
-
-      <button type="submit">Add Product</button>
-    </form>
-    <p id="status"></p>
+    <div class="orders-section">
+      <h3>Recent Orders</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="orders-table">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+    </div>
   </div>
-
-  <p id="loading-msg">Checking authorization...</p>
-
-  <footer class="footer section">
+  
+<footer class="footer section">
                 <div class="footer-container bd-grid">
                     <div class="footer-box">
                         <h3 class="footer-title">DayKart</h3>
@@ -74,7 +67,7 @@
                         <h3 class="footer-title">EXPLORE</h3>
                         <ul>
                             <li><a href="admin-products.html" class="footer-link">Products</a></li>
-                            <li><a href="#featured" class="footer-link">wallet</a></li>
+                            <li><a href="wallet.html" class="footer-link">wallet</a></li>
                             <li><a href="#fancy" class="footer-link">Fancy</a></li>
                             <li><a href="#new" class="footer-link">New</a></li>
                         </ul>
@@ -99,9 +92,6 @@
 
                 <p class="footer-copy">&#169; 2025 <a href="https://codepen.io/leonam-silva-de-souza" target="_blank">DayKart</a>. All rights reserved</p>
             </footer>
-
-  <script type="module" src="admin-check.js"></script>
-  <script type="module" src="admin.js"></script>
-  <script src="../home.js"></script>
+  <script type="module" src="wallet.js"></script>
 </body>
 </html>
