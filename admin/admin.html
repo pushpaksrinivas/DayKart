@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Add Product</title>
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <div id="admin-container" style="display: none;">
+    <h2>Add New Product</h2>
+    <form id="productForm">
+      <label>Product Title</label>
+      <input type="text" id="title" required />
+
+      <label>Description</label>
+      <textarea id="description" required></textarea>
+
+      <label>MRP (₹)</label>
+      <input type="number" id="mrp" required />
+
+      <label>Offer Price (₹)</label>
+      <input type="number" id="offerPrice" required />
+
+      <label>Quantity</label>
+      <input type="number" id="quantity" required />
+
+      <label>Category</label>
+      <input type="text" id="category" required />
+
+      <label>Image URLs (comma-separated)</label>
+      <input type="text" id="images" required />
+
+      <button type="submit">Add Product</button>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <p id="loading-msg">Checking authorization...</p>
+
+  <script type="module" src="admin-check.js"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

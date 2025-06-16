@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="nav-shop">
-                    <a href="#"><i class="bx bx-shopping-bag"></i></a>
-                    <a href="account/dashboard.html"><i class="bx bx-user"></i></a>
-                </div>
+  <a href="cart.html" id="cartIcon" style="position: relative;"><i class="bx bx-shopping-bag"></i><span id="cart-count" class="cart-badge">0</span></a>
+  <a href="account/dashboard.html"><i class="bx bx-user"></i></a>
+</div>
             </nav>
         </header>
 
@@ -101,9 +101,7 @@
 
           <div class = "purchase-info">
             <input type = "number" min = "0" value = "1">
-            <button type = "button" class = "btn" id="add-to-cart">
-              Add to Cart <i class = "fas fa-shopping-cart"></i>
-            </button>
+           <button type="button" class="btn" id="add-to-cart">Add to Cart <i class="fas fa-shopping-cart"></i></button>
             <button type = "button" class = "btn" id="buy-now">Buy Now</button>
           </div>
 
@@ -183,6 +181,7 @@
 
                 <p class="footer-copy">&#169; 2025 <a href="https://codepen.io/leonam-silva-de-souza" target="_blank">DayKart</a>. All rights reserved</p>
             </footer>
-    <script src="product.js"></script>
+    <script src="product.js" type="module"></script>
+    <script src="home.js"></script>
 </body>
 </html>

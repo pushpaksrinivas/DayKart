@@ -27,8 +27,8 @@
                 </div>
 
                 <div class="nav-shop">
-                    <a href="#"><i class="bx bx-shopping-bag"></i></a>
-                    <a href="account/dashboard.html"><i class="bx bx-user"></i></a>
+                    <a href="/cart.html" id="cartIcon" style="position: relative;"><i class="bx bx-shopping-bag"></i><span id="cart-count" class="cart-badge">0</span></a>
+                    <a href="account/dashboard.html" ><i class="bx bx-user"></i></a>
                 </div>
             </nav>
     </header>
@@ -138,7 +138,31 @@
 
             <p class="footer-copy">&#169; 2025 <a href="https://codepen.io/leonam-silva-de-souza" target="_blank">DayKart</a>. All rights reserved</p>
         </footer>
-        <script src="pro.js"></script>
+        <script src="pro.js" type="module"></script>
         <script src="home.js"></script>
+        <script type="module">
+ async function updateCartBadge() {
+  try {
+    const cartRef = collection(db, `users/${userId}/cart`);
+    const cartSnapshot = await getDocs(cartRef);
+
+    let totalQty = 0;
+    cartSnapshot.forEach(doc => {
+      const item = doc.data();
+      totalQty += item.qty;
+    });
+
+    const cartCountEl = document.getElementById("cart-count");
+    if (cartCountEl) {
+      cartCountEl.textContent = totalQty;
+    }
+
+  } catch (err) {
+    console.error("Error updating cart badge:", err);
+  }
+}
+
+  updateCartBadge();
+</script>
 </body>
 </html>

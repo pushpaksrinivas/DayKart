@@ -3,7 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
   authDomain: "daykart-77771.firebaseapp.com",
   databaseURL: "https://daykart-77771-default-rtdb.firebaseio.com",

@@ -1,5 +1,4 @@
-// Firebase imports
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getFirestore,
   doc,
@@ -7,194 +6,167 @@ import {
   collection,
   addDoc,
   getDocs,
-  query,
-  where,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { firebaseConfig } from './firebase-config.js';
+import { firebaseConfig } from "./firebase-config.js";
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const auth = getAuth();
-const dbRef = getFirestore();
+// Get product ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get("id");
 
-// Showing Menu
+if (!productId) {
+  alert("Missing product ID in URL.");
+  throw new Error("Product ID is required.");
+}
 
-const showMenu = (toggleId, navId) => {
-    const toggle = document.getElementById(toggleId);
-    const nav = document.getElementById(navId);
+// Get or create user ID
+let userId = localStorage.getItem("userId");
+if (!userId) {
+  userId = `guest-${crypto.randomUUID()}`;
+  localStorage.setItem("userId", userId);
+}
 
-    if(toggle && nav) {
-        toggle.addEventListener('click', () => {
-            nav.classList.toggle('show');
-        })
+// Firestore references
+const productRef = doc(db, `products/${productId}`);
+const cartRef = collection(db, `users/${userId}/cart`);
+
+// DOM elements
+const productName = document.getElementById("product-name");
+const offerPrice = document.getElementById("offer-price");
+const mrp = document.getElementById("mrp");
+const discount = document.getElementById("discount");
+const availableQty = document.getElementById("available-qty");
+const productDescription = document.getElementById("product-description");
+const quantityInput = document.querySelector(".purchase-info input");
+const addToCartBtn = document.getElementById("add-to-cart");
+const buyNowBtn = document.getElementById("buy-now");
+
+async function loadProduct() {
+  try {
+    const snap = await getDoc(productRef);
+    if (!snap.exists()) {
+      productName.textContent = "Product not found";
+      return;
     }
-}
 
-showMenu('nav-toggle', 'nav-menu');
+    const product = snap.data();
 
-//Removing Menu by clicking links
+    // Set product details
+    productName.textContent = product.title || "Unnamed Product";
+offerPrice.textContent = product.offerPrice;
+mrp.textContent = product.mrp;
+productDescription.textContent = product.description || "No description available";
+availableQty.textContent = product.quantity;
 
-const navLink = document.querySelectorAll('.nav-link');
-const navMenu = document.getElementById('nav-menu');
+const discountPercent = product.discountPercent !== undefined
+  ? product.discountPercent
+  : Math.round(((product.mrp - product.offerPrice) / product.mrp) * 100);
+discount.textContent = `${discountPercent}%`;
 
-function linkAction() {
-    navMenu.classList.remove('show');
-}
+    // Image handling
+    const images = Array.isArray(product.images) && product.images.length
+      ? product.images
+      : [product.image || "fallback.jpg"];
 
-navLink.forEach(n => n.addEventListener('click', linkAction));
+    const showcase = document.querySelector(".img-showcase");
+    const selectors = document.querySelector(".img-select");
 
-//Changing Active Link by scrolling
-
-const sections = document.querySelectorAll('section[id]');
-window.addEventListener('scroll', scrollActive);
-
-function scrollActive() {
-    const scrollY = window.pageYOffset;
-
-    sections.forEach(current => {
-        const sectionHeight = current.offsetHeight;
-        const sectionTop = current.offsetTop - 50;
-        const sectionId = current.getAttribute('id');
-
-        if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-            document.querySelector('.nav-menu a[href*='+ sectionId +']').classList.add('active');
-        }else {
-            document.querySelector('.nav-menu a[href*='+ sectionId +']').classList.remove('active');
-        }
-    })
-}
-
-//Changing Color Header
-
-window.onscroll = () => {
-    const nav = document.getElementById('header');
-    if(this.scrollY >= 200) nav.classList.add('scroll-header'); else nav.classList.remove('scroll-header');
-}
-
-// ========== IMAGE SLIDER ==========
-let imgId = 1;
-function slideImage() {
-  const displayWidth = document.querySelector('.img-showcase img:first-child')?.clientWidth || 0;
-  document.querySelector('.img-showcase').style.transform = `translateX(-₹{(imgId - 1) * displayWidth}px)`;
-}
-window.addEventListener('resize', slideImage);
-
-// ========== PRODUCT DATA LOADING ==========
-document.addEventListener('DOMContentLoaded', async () => {
-  const params = new URLSearchParams(window.location.search);
-  const productId = params.get('id');
-  if (!productId) return alert("No product ID found");
-
-  const docRef = doc(dbRef, "products", productId);
-  const docSnap = await getDoc(docRef);
-  if (!docSnap.exists()) return alert("Product not found");
-
-  const data = docSnap.data();
-  document.getElementById('product-name').textContent = data.name;
-  document.getElementById('offer-price').textContent = data.offerPrice;
-  document.getElementById('mrp').textContent = data.mrp;
-  document.getElementById('available-qty').textContent = data.quantity;
-  document.getElementById('product-description').textContent = data.description;
-
-  const discount = Math.round(((data.mrp - data.offerPrice) / data.mrp) * 100);
-  document.getElementById('discount').textContent = discount;
-
-  const imgShowcase = document.querySelector('.img-showcase');
-  const imgSelect = document.querySelector('.img-select');
-  imgShowcase.innerHTML = '';
-  imgSelect.innerHTML = '';
-
-  data.images.forEach((imgUrl, index) => {
-    imgShowcase.innerHTML += `<img src="₹{imgUrl}" alt="product image">`;
-    imgSelect.innerHTML += `
+    showcase.innerHTML = images.map(img => `<img src="${img}" alt="product-img">`).join("");
+    selectors.innerHTML = images.map((img, i) => `
       <div class="img-item">
-        <a href="#" data-id="₹{index + 1}">
-          <img src="₹{imgUrl}" alt="product thumbnail">
+        <a href="#" data-id="${i + 1}">
+          <img src="${img}" alt="product-img">
         </a>
-      </div>`;
-  });
+      </div>
+    `).join("");
 
-  // Update image slider
-  document.querySelectorAll('.img-select a').forEach(a => {
-    a.addEventListener('click', (e) => {
-      e.preventDefault();
-      imgId = parseInt(a.dataset.id);
-      slideImage();
+    document.querySelectorAll(".img-item a").forEach((btn, i) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        showcase.style.transform = `translateX(-${100 * i}%)`;
+      });
     });
-  });
-
-  slideImage();
-
-  // Add product ID to buttons
-  document.querySelector('.add-to-cart-btn')?.setAttribute('data-id', productId);
-  document.querySelector('.buy-now-btn')?.setAttribute('data-id', productId);
-});
-
-// ========== ADD TO CART ==========
-document.querySelector('.add-to-cart-btn')?.addEventListener('click', async (e) => {
-  const user = auth.currentUser;
-  if (!user) return alert("Please log in to add items to cart.");
-
-  const button = e.currentTarget;
-  const productId = button.dataset.id;
-  const title = document.getElementById('product-name').textContent;
-  const price = parseFloat(document.getElementById('offer-price').textContent);
-  const image = document.querySelector('.img-showcase img')?.src || "";
-
-  const cartRef = collection(dbRef, "carts");
-  await addDoc(cartRef, {
-    userId: user.uid,
-    productId,
-    title,
-    price,
-    image,
-    quantity: 1,
-    addedAt: new Date()
-  });
-
-  updateCartIndicator();
-  alert("Product added to cart!");
-});
-
-// ========== BUY NOW ==========
-document.querySelector('.buy-now-btn')?.addEventListener('click', () => {
-  const productId = document.querySelector('.buy-now-btn').dataset.id;
-  localStorage.setItem("buyNowProductId", productId);
-  window.location.href = "checkout.html?id=" + productId;
-});
-
-// ========== UPDATE CART INDICATOR ==========
-async function updateCartIndicator() {
-  const user = auth.currentUser;
-  if (!user) return;
-  const q = query(collection(dbRef, "carts"), where("userId", "==", user.uid));
-  const querySnapshot = await getDocs(q);
-
-  const count = querySnapshot.size;
-  const bagIcon = document.querySelector('.bx-shopping-bag');
-  if (bagIcon) {
-    let badge = document.querySelector('.cart-count-badge');
-    if (!badge) {
-      badge = document.createElement('span');
-      badge.className = 'cart-count-badge';
-      bagIcon.parentElement.appendChild(badge);
-    }
-    badge.textContent = count;
+  } catch (error) {
+    console.error("Error loading product:", error);
   }
 }
-auth.onAuthStateChanged(user => {
-  if (user) updateCartIndicator();
+
+addToCartBtn.addEventListener("click", async () => {
+  const qty = parseInt(quantityInput.value);
+  if (qty <= 0) {
+    return alert("Please enter a valid quantity");
+  }
+  if (qty > product.quantity) {
+  return alert("Not enough stock available");
+}
+
+  try {
+    const snap = await getDoc(productRef);
+    if (!snap.exists()) return;
+
+    const product = snap.data();
+    if (qty > product.stock) {
+      return alert("Not enough stock available");
+    }
+
+    const cartSnapshot = await getDocs(cartRef);
+    let existing = null;
+
+    cartSnapshot.forEach(docSnap => {
+      const item = docSnap.data();
+      if (item.productId === productId) {
+        existing = { ...item, id: docSnap.id };
+      }
+    });
+
+    if (existing) {
+      const newQty = Math.min(existing.qty + qty, product.stock);
+      const existingRef = doc(db, `users/${userId}/cart/${existing.id}`);
+      await updateDoc(existingRef, { qty: newQty });
+    } else {
+      await addDoc(cartRef, {
+        productId,
+        qty,
+        addedAt: Date.now()
+      });
+    }
+
+    alert("Item added to cart!");
+    updateCartBadge();
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+  }
 });
 
-// ========== REDUCE PRODUCT QUANTITY ==========
-async function reduceQuantity(productId, quantityToReduce) {
-  const productRef = doc(dbRef, 'products', productId);
-  const productSnap = await getDoc(productRef);
-  if (!productSnap.exists()) return;
+buyNowBtn.addEventListener("click", () => {
+  alert("Redirecting to checkout...");
+  // Here you could redirect: window.location.href = "/checkout.html?id=" + productId;
+});
 
-  const currentQty = productSnap.data().quantity;
-  const newQty = Math.max(currentQty - quantityToReduce, 0);
-  await updateDoc(productRef, { quantity: newQty });
+async function updateCartBadge() {
+  try {
+    const cartSnapshot = await getDocs(cartRef);
+    let count = 0;
+    cartSnapshot.forEach(doc => {
+      count += doc.data().qty || 1;
+    });
+
+    const cartCountEl = document.querySelector(".bx-shopping-bag");
+    if (cartCountEl) {
+      cartCountEl.setAttribute("data-count", count);
+    }
+  } catch (error) {
+    console.error("Error updating cart badge:", error);
+  }
 }
+
+// Debugging Logs (optional)
+console.log("Product ID:", productId);
+console.log("User ID:", userId);
+
+loadProduct();
+updateCartBadge();

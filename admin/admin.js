@@ -3,56 +3,58 @@ import {
   getFirestore,
   collection,
   addDoc,
-  serverTimestamp
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDsP80XFSykRlteD8LTQaw76TD8AJItMFw",
-  authDomain: "daykart-77771.firebaseapp.com",
-  databaseURL: "https://daykart-77771-default-rtdb.firebaseio.com",
-  projectId: "daykart-77771",
-  storageBucket: "daykart-77771.firebasestorage.app",
-  messagingSenderId: "533666061468",
-  appId: "1:533666061468:web:a40c38b11a93a18e776159",
-  measurementId: "G-X1FCYK4XR1"
-};
+import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const form = document.getElementById('productForm');
-const status = document.getElementById('status');
+const form = document.getElementById("productForm");
+const status = document.getElementById("status");
 
-form.addEventListener('submit', async (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const title = document.getElementById('title').value;
-  const description = document.getElementById('description').value;
-  const images = document.getElementById('images').value.split(',').map(url => url.trim());
-  const mrp = parseFloat(document.getElementById('mrp').value);
-  const offerPrice = parseFloat(document.getElementById('offerPrice').value);
-  const quantity = parseInt(document.getElementById('quantity').value);
-  const category = document.getElementById('category').value;
-  const link = document.getElementById('link').value;
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const mrp = parseFloat(document.getElementById("mrp").value);
+  const offerPrice = parseFloat(document.getElementById("offerPrice").value);
+  const quantity = parseInt(document.getElementById("quantity").value);
+  const category = document.getElementById("category").value.trim();
+  const imageInput = document.getElementById("images").value.trim();
+
+  if (!title || !description || !mrp || !offerPrice || !quantity || !category || !imageInput) {
+    return alert("Please fill all fields.");
+  }
+
+  const images = imageInput.split(",").map(url => url.trim()).filter(url => url);
+  const discountPercent = Math.round(((mrp - offerPrice) / mrp) * 100);
+
+  const newProduct = {
+    title,
+    description,
+    mrp,
+    offerPrice,
+    quantity,
+    stock: quantity,
+    images,
+    discountPercent,
+    category,
+    createdAt: Date.now()
+  };
 
   try {
-    await addDoc(collection(db, "products"), {
-      title,
-      description,
-      images,
-      mrp,
-      offerPrice,
-      discountPercent: Math.round(((mrp - offerPrice) / mrp) * 100),
-      quantity,
-      category,
-      link,
-      createdAt: serverTimestamp()
-    });
+    const docRef = await addDoc(collection(db, "products"), newProduct);
 
+    // Optional: Save productId inside the document
+    await updateDoc(docRef, { productId: docRef.id });
+
+    status.innerHTML = `✅ Product added!<br>Product ID: <strong>${docRef.id}</strong>`;
     form.reset();
-    status.textContent = "✅ Product added successfully!";
-  } catch (error) {
-    console.error("Error adding product: ", error);
-    status.textContent = "❌ Error adding product.";
+  } catch (err) {
+    console.error("Error adding product:", err);
+    status.textContent = "❌ Error adding product!";
+    status.style.color = "red";
   }
 });
