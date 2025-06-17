@@ -65,7 +65,7 @@ availableQty.textContent = product.quantity;
 const discountPercent = product.discountPercent !== undefined
   ? product.discountPercent
   : Math.round(((product.mrp - product.offerPrice) / product.mrp) * 100);
-discount.textContent = `${discountPercent}%`;
+discount.textContent = `${discountPercent}`;
 
     // Image handling
     const images = Array.isArray(product.images) && product.images.length

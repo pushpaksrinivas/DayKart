@@ -37,7 +37,7 @@ function generateReferralCodeFromInput(username, email) {
     randomPart += characters.charAt(Math.floor(Math.random() * characters.length));
   }
 
-  return `₹{part1}₹{part2}₹{randomPart}`;
+  return `${part1}${part2}${randomPart}`;
 }
 
 async function generateUniqueReferralCode(username = "", email = "") {
@@ -110,6 +110,7 @@ document.getElementById("signupBtn").onclick = async () => {
       uid
     });
 
+    console.log("User created successfully. Redirecting...");
     window.location.href = "/index.html";
   } catch (err) {
     alert("Signup error: " + err.message);
