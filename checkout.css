@@ -1,39 +1,62 @@
-/* === Base Styles === */
+/* === Base === */
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
-  padding: 40px 20px;
   margin: 0;
+  padding: 40px 20px;
 }
 
 .container {
   max-width: 1100px;
-  background: white;
+  background: #fff;
   padding: 40px;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   margin: auto;
-  transition: all 0.3s ease;
 }
 
+/* === Headings === */
 h1, h2, h3 {
   color: #2c3e50;
   margin-bottom: 20px;
 }
+h1 { font-size: 32px; }
+h2 { font-size: 24px; }
+h3 { font-size: 20px; }
 
-h1 {
-  font-size: 32px;
+/* === Layout === */
+.checkout-wrapper {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
 }
 
-h2 {
-  font-size: 24px;
+.checkout-left {
+  flex: 0 0 60%;
 }
 
-h3 {
-  font-size: 20px;
+.checkout-right {
+  flex: 0 0 40%;
 }
 
-/* === Form Layout === */
+/* === Responsive === */
+@media (max-width: 768px) {
+  .checkout-wrapper {
+    flex-direction: column;
+  }
+
+  .checkout-left,
+  .checkout-right {
+    flex: 1 1 100%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* === Form === */
 .form-row {
   display: flex;
   gap: 20px;
@@ -47,7 +70,6 @@ input, textarea {
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 15px;
-  transition: border-color 0.3s;
 }
 
 input:focus, textarea:focus {
@@ -60,14 +82,34 @@ textarea {
   min-height: 100px;
 }
 
+input[disabled],
+input[readonly] {
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: not-allowed;
+}
+
+/* === Labels === */
+label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 8px;
+  accent-color: #7494ec;
+}
+
 /* === Order Summary === */
 .order-summary {
-  border-top: 1px solid #ccc;
-  padding-top: 20px;
   background-color: #f9f9f9;
-  border-radius: 12px;
   padding: 20px;
-  margin-top: 20px;
+  border-radius: 12px;
+  border-top: 1px solid #ccc;
+  margin-bottom: 20px;
 }
 
 .order-row {
@@ -86,36 +128,39 @@ textarea {
   font-size: 16px;
 }
 
-/* === Payment Section === */
+/* === Payment === */
 .payment-section {
-  margin-top: 30px;
-  padding-top: 20px;
   border-top: 1px solid #ddd;
+  padding-top: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 12px;
-  font-weight: 500;
-  color: #333;
+.payment-section .info {
+  font-size: 14px;
+  background-color: #eef1ff;
+  padding: 10px 15px;
+  border-left: 4px solid #7494ec;
+  border-radius: 8px;
+  color: #666;
+  margin: 10px 0 20px;
 }
 
 /* === Buttons === */
-.proceed-btn {
-  width: 100%;
+button,
+#placeOrderBtn {
   background-color: #7494ec;
   color: white;
-  padding: 15px;
+  padding: 12px 20px;
   border: none;
   border-radius: 10px;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
-  margin-top: 30px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  transition: 0.3s ease;
 }
 
-.proceed-btn:hover {
+button:hover,
+#placeOrderBtn:hover {
   background-color: #5a78d1;
   transform: translateY(-2px);
 }
@@ -133,52 +178,22 @@ label {
   border-left: 4px solid #7494ec;
 }
 
+#toggleCoupon {
+  background: none;
+  border: none;
+  color: #3366cc;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 10px;
+}
+
+#toggleCoupon:hover {
+  text-decoration: underline;
+}
+
 #couponMessage {
   font-size: 14px;
   color: green;
   margin-top: 10px;
-}
-
-/* === Info Text === */
-.info {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.5;
-}
-
-/* === Layout Wrapper === */
-.checkout-wrapper {
-  display: flex;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 30px;
-}
-
-.checkout-details {
-  flex: 1 1 60%;
-}
-
-.checkout-summary {
-  flex: 1 1 35%;
-}
-
-/* === Responsive Design === */
-@media (max-width: 768px) {
-  .checkout-wrapper {
-    flex-direction: column;
-  }
-
-  .checkout-details,
-  .checkout-summary {
-    flex: 1 1 100%;
-  }
-
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .proceed-btn {
-    font-size: 16px;
-  }
 }

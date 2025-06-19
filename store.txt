@@ -1,8 +1,8 @@
+// Load cart items from localStorage
 let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 let discount = 0;
 let offerTotal = 0;
 let mrpTotal = 0;
-let shipping = 0;
 
 // DOM elements
 const orderSummary = document.getElementById("orderSummary");
@@ -13,7 +13,14 @@ const couponMsg = document.getElementById("couponMessage");
 const applyCouponBtn = document.getElementById("applyCoupon");
 const couponInput = document.getElementById("couponCode");
 
-// Render cart items
+// Prefill email and college
+const userEmail = localStorage.getItem("userEmail");
+if (userEmail) document.getElementById("email").value = userEmail;
+
+const userCollege = localStorage.getItem("userCollege");
+if (userCollege) document.getElementById("collegeName").value = userCollege;
+
+// Render cart items in summary
 function renderCartItems() {
   document.querySelectorAll(".order-row.dynamic").forEach(row => row.remove());
   offerTotal = 0;
@@ -23,6 +30,7 @@ function renderCartItems() {
     const qty = item.qty || 1;
     const offerPrice = item.offerPrice || 0;
     const mrp = item.mrp || offerPrice;
+
     const itemTotal = offerPrice * qty;
     const itemMrpTotal = mrp * qty;
 
@@ -41,29 +49,11 @@ function renderCartItems() {
   updateTotals();
 }
 
-// Calculate and update totals
+// Update subtotal, total, and savings
 function updateTotals() {
   const youSaved = mrpTotal - offerTotal;
-
-  // Determine shipping cost (default logic, will be overridden on order place)
-  shipping = 0;
-  if (offerTotal < 499) shipping = 59;
-  else if (offerTotal < 1499) shipping = 99;
-
-  // Create or update shipping row
-  let shippingRow = document.getElementById("shippingRow");
-  if (!shippingRow) {
-    shippingRow = document.createElement("div");
-    shippingRow.className = "order-row";
-    shippingRow.id = "shippingRow";
-    shippingRow.innerHTML = `<span>Shipping</span><span id="shippingFee">₹${shipping}</span>`;
-    orderSummary.insertBefore(shippingRow, document.getElementById("youSavedRow")?.nextSibling || subtotalRow.nextSibling);
-  } else {
-    document.getElementById("shippingFee").textContent = `₹${shipping}`;
-  }
-
   subtotalEl.textContent = `₹${offerTotal.toFixed(2)}`;
-  totalEl.textContent = `₹${Math.max(offerTotal - discount + shipping, 0).toFixed(2)}`;
+  totalEl.textContent = `₹${Math.max(offerTotal - discount, 0).toFixed(2)}`;
 
   let savedRow = document.getElementById("youSavedRow");
   if (!savedRow) {
@@ -77,7 +67,7 @@ function updateTotals() {
   }
 }
 
-// Apply coupon
+// Apply coupon logic
 applyCouponBtn.addEventListener("click", () => {
   const code = couponInput.value.trim().toUpperCase();
   discount = 0;
@@ -102,10 +92,13 @@ applyCouponBtn.addEventListener("click", () => {
   updateTotals();
 });
 
-// Toggle coupon input
+// Toggle coupon field visibility
 document.getElementById("toggleCoupon").addEventListener("click", () => {
   document.getElementById("couponForm").classList.toggle("hidden");
 });
 
-// Initial call
+// Initial render
 renderCartItems();
+
+
+this for the checkout page
