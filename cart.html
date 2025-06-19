@@ -34,9 +34,20 @@
     </header>
   <h2>Your Cart</h2>
   <div id="cart-items"></div>
+  <div class="order-summary" id="order-summary">
+  <h2>🧾 Cart Summary</h2>
+  <p>MRP Total: ₹<span id="mrpTotal">0.00</span></p>
+  <p>Offer Price Total: ₹<span id="offerTotal">0.00</span></p>
+  <p style="color: green;">You Saved on Product Price: ₹<span id="youSaved">0.00</span></p>
+</div>
   <div class="cart-summary">
   <h3>Total: ₹<span id="total">0</span></h3>
   <button id="checkoutBtn">Checkout</button>
+</div>
+<div id="popup" class="popup hidden">
+  <div class="popup-content">
+    <p>Proceeding to checkout...</p>
+  </div>
 </div>
   <div class="cart-divider"></div>
   <footer class="footer section">

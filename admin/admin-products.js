@@ -18,19 +18,19 @@ async function loadProducts() {
     const div = document.createElement('div');
     div.className = 'product-card';
     div.innerHTML = `
-      <h3>₹{product.name}</h3>
-      <p><strong>Category:</strong> ₹{product.category}</p>
-      <p><strong>MRP:</strong> ₹₹{product.mrp} | <strong>Offer:</strong> ₹₹{product.offerPrice}</p>
-      <p><strong>Quantity:</strong> ₹{product.quantity}</p>
-      <button onclick="editProduct('₹{id}')">Edit</button>
-      <button onclick="deleteProduct('₹{id}')">Delete</button>
+      <h3>${product.title}</h3>
+      <p><strong>Category:</strong> ${product.category}</p>
+      <p><strong>MRP:</strong> $${product.mrp} | <strong>Offer:</strong> $${product.offerPrice}</p>
+      <p><strong>Quantity:</strong> ${product.quantity}</p>
+      <button onclick="editProduct('${id}')">Edit</button>
+      <button onclick="deleteProduct('${id}')">Delete</button>
     `;
     productList.appendChild(div);
   });
 }
 
 window.editProduct = (id) => {
-  location.href = `edit-product.html?id=₹{id}`;
+  location.href = `edit-product.html?id=${id}`;
 };
 
 window.deleteProduct = async (id) => {

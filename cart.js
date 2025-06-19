@@ -27,6 +27,13 @@ const cartItemsContainer = document.getElementById("cart-items");
 const totalEl = document.getElementById("total");
 const cartCountEl = document.getElementById("cart-count");
 
+// Sync cart to localStorage
+async function syncCartToLocalStorage() {
+  const snapshot = await getDocs(cartRef);
+  const cartItems = snapshot.docs.map(doc => doc.data());
+  localStorage.setItem("cart", JSON.stringify(cartItems));
+}
+
 async function loadCart() {
   try {
     const snapshot = await getDocs(cartRef);
@@ -37,6 +44,14 @@ async function loadCart() {
       totalEl.textContent = "0.00";
       cartCountEl.textContent = "0";
       cartCountEl.style.display = "none";
+
+      // Reset summary values
+      document.getElementById("mrpTotal").textContent = "0.00";
+      document.getElementById("offerTotal").textContent = "0.00";
+      document.getElementById("youSaved").textContent = "0.00";
+
+      // Clear local cart
+      localStorage.removeItem("cart");
       return;
     }
 
@@ -48,7 +63,8 @@ async function loadCart() {
     const productSnaps = await Promise.all(productPromises);
 
     cartItemsContainer.innerHTML = "";
-    let total = 0;
+    let mrpTotal = 0;
+    let offerTotal = 0;
 
     cartDocs.forEach((cartDoc, i) => {
       const cartData = cartDoc.data();
@@ -59,7 +75,12 @@ async function loadCart() {
 
       const product = productSnap.data();
       const qty = cartData.qty;
-      total += product.offerPrice * qty;
+
+      const mrp = product.mrp;
+      const offerPrice = product.offerPrice;
+
+      mrpTotal += mrp * qty;
+      offerTotal += offerPrice * qty;
 
       const div = document.createElement("div");
       div.className = "cart-item";
@@ -68,7 +89,8 @@ async function loadCart() {
           <img src="${cartData.image}" alt="${cartData.title}" class="cart-img" width="80">
           <div class="cart-details">
             <span><strong>${cartData.title}</strong></span>
-            <span>Price: ₹${cartData.price}</span>
+            <span>MRP: ₹${mrp}</span>
+            <span>Offer Price: ₹${offerPrice}</span>
             <span>Available: ${product.quantity}</span>
             <div class="cart-qty-controls">
               <button class="qty-btn" data-action="decrease" data-id="${cartId}">−</button>
@@ -76,16 +98,24 @@ async function loadCart() {
               <button class="qty-btn" data-action="increase" data-id="${cartId}" ${qty >= product.quantity ? "disabled" : ""}>+</button>
               <button class="delete-btn" data-id="${cartId}" style="margin-left: 10px; color: red;">🗑️</button>
             </div>
-            <span>Total: ₹${(cartData.price * qty).toFixed(2)}</span>
+            <span>Item Total: ₹${(offerPrice * qty).toFixed(2)}</span>
           </div>
         </div>
       `;
       cartItemsContainer.appendChild(div);
     });
 
-    totalEl.textContent = total.toFixed(2);
+    const youSaved = mrpTotal - offerTotal;
+
+    totalEl.textContent = offerTotal.toFixed(2); // Grand Total
+    document.getElementById("mrpTotal").textContent = mrpTotal.toFixed(2);
+    document.getElementById("offerTotal").textContent = offerTotal.toFixed(2);
+    document.getElementById("youSaved").textContent = youSaved.toFixed(2);
     cartCountEl.textContent = cartDocs.length;
     cartCountEl.style.display = "inline-block";
+
+    // Update localStorage with latest cart
+    await syncCartToLocalStorage();
 
     // Attach quantity & delete buttons
     document.querySelectorAll(".qty-btn").forEach((btn) => {
@@ -127,12 +157,13 @@ async function handleQtyChange(e) {
         qty--;
       } else {
         await deleteDoc(cartItemRef);
-        return loadCart();
+        await loadCart();
+        return;
       }
     }
 
     await updateDoc(cartItemRef, { qty });
-    loadCart();
+    await loadCart();
   } catch (err) {
     console.error("Failed to update quantity:", err);
   } finally {
@@ -147,7 +178,7 @@ async function handleDeleteItem(e) {
 
   try {
     await deleteDoc(doc(db, `users/${userId}/cart/${cartId}`));
-    loadCart();
+    await loadCart();
   } catch (err) {
     console.error("Error deleting cart item:", err);
   }
@@ -155,7 +186,14 @@ async function handleDeleteItem(e) {
 
 // Checkout button
 document.getElementById("checkoutBtn").addEventListener("click", () => {
-  alert("Proceeding to checkout...");
+  const popup = document.getElementById("popup");
+  popup.classList.remove("hidden");
+
+  setTimeout(() => {
+    popup.classList.add("hidden");
+    window.location.href = "/checkout.html";
+  }, 1000); // Display for 2 seconds
 });
+
 
 loadCart();

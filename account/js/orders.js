@@ -23,12 +23,12 @@ onAuthStateChanged(auth, async (user) => {
         const card = document.createElement("div");
         card.className = "order-card";
         card.innerHTML = `
-          <h3>Order ID: ₹{order.orderId || doc.id}</h3>
-          <p><strong>Product:</strong> ₹{order.productName}</p>
-          <p><strong>Quantity:</strong> ₹{order.quantity}</p>
-          <p><strong>Price:</strong> ₹₹{order.price}</p>
-          <p><strong>Status:</strong> ₹{order.status}</p>
-          <p><strong>Date:</strong> ₹{order.orderDate}</p>
+          <h3>Order ID: ${order.orderId || doc.id}</h3>
+          <p><strong>Product:</strong> ${order.productName}</p>
+          <p><strong>Quantity:</strong> ${order.quantity}</p>
+          <p><strong>Price:</strong> ₹${order.grandTotal}</p>
+          <p><strong>Status:</strong> ${order.status}</p>
+          <p><strong>Date:</strong> ${order.timestamp}</p>
         `;
         container.appendChild(card);
       });
